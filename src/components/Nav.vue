@@ -22,7 +22,7 @@
                     <router-link to="/login" class="btn btn-light ms-3">Login</router-link>
                 </div>
                 <div class="d-flex" v-if="user">
-                    <a href="javascript:void(0)" @click="handleClick"  class="btn btn-light ms-3">Logout</a>
+                    <a href="javascript:void(0)" @click="handleLogout"  class="btn btn-light ms-3">Logout</a>
                 </div>
             </div>
         </div>
@@ -30,17 +30,38 @@
 </template>
 
 <script>
+import axios from 'axios';
 //import getters
 import { mapGetters } from "vuex";
 
 export default{
     name: 'Nav',
 
+     
     methods: {
-        handleClick(){
-            localStorage.removeItem('token');
-            this.$store.dispatch('user', null)
-            this.$router.push('/')
+        
+         
+
+
+        async handleLogout(){
+
+
+            try {
+                const response = await axios.post('logout');
+
+                console.log(response.data.message)
+                localStorage.clear();
+                this.$store.dispatch('user', null)
+                this.$router.push('/')
+
+            } catch (e) {
+                console.log(e.response.data.message)
+            }
+
+
+            // localStorage.removeItem('token');
+            // this.$store.dispatch('user', null)
+            // this.$router.push('/')
         }
     },
     computed: {

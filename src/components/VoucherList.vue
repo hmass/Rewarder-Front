@@ -1,33 +1,13 @@
 <template>
     <div>
         <h3>Customers Vouchers</h3>
-        
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                <th scope="col">Customer Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Order Value</th>
-                <th scope="col">Voucher Value</th>
-                <th scope="col">Redeemed</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="voucher in vouchers.data" :key="voucher.id">
-                    <td class="align-middle">{{ voucher.customer_id }}</td>
-                    <td class="align-middle">{{ voucher.name }}</td>
-                    <td class="align-middle">{{ voucher.order_value }}</td>
-                    <td class="align-middle">{{ voucher.voucher_value }}</td>
-                    <td class="align-middle">{{ voucher.redeemed }}</td>
-                </tr> 
-               
-            </tbody>
-        </table>
+        <Datatable url="vouchers" :columns="['customer_id','name','order_value','voucher_value','redeemed']"/>
     </div>
     
 </template>
 <script>
 import axios from "axios";
+import Datatable from './Datatable.vue';
 export default {
     name: 'VoucherList',
     data(){
@@ -36,6 +16,9 @@ export default {
         }
     },
 
+    components:{
+        Datatable
+    },
     methods: {
 
         //fetch vouchers

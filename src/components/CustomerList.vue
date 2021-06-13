@@ -1,30 +1,21 @@
 <template>
     <div>
-        <h3>Customers List</h3>
-        <button @click="generateVouchers" class="btn-success btn-sm">Generate Vouchers</button>
-        <table id="customertable" class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">Customer Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Order Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="customer in customers.data" :key="customer.id">
-                    <td class="align-middle">{{ customer.customer_id }}</td>
-                    <td class="align-middle">{{ customer.name }}</td>
-                    <td class="align-middle">{{ customer.order_value }}</td>
-                                        
-                </tr> 
-                
-            </tbody>
-        </table>
+        <div class="row">
+            <h3>Customers List</h3>
+            <div class="mt-2">
+                <button @click="generateVouchers" class="btn-success btn-sm">Generate Vouchers</button>
+            </div>
+        </div>
+        <br>
+        
+        <Datatable url="customers" :columns="['customer_id','name','order_value']"/>
+       
     </div>
     
 </template>
 <script>
 import axios from "axios";
+import Datatable from './Datatable.vue';
 export default {
     name: 'CustomerList',
     data(){
@@ -32,16 +23,11 @@ export default {
             customers: {}
         }
     },
+    components:{
+        Datatable
+    },
     methods: {
-        async fetchCustomers(){
-            try {
-                const response = await axios.get('customers');
-                this.customers = response.data;
-            } catch (e) {
-                console.log('error occured')
-            }
-            
-        },
+        
 
         //generate vouchers
         async generateVouchers(){
@@ -49,14 +35,25 @@ export default {
             console.log(resp);
 
             this.$router.push('/vouchers')
+        },
+
+        showAlert(){
+                this.$swal({
+              title: '<i>Please wait</i>',
+          html:
+                '<div class="text-center">'+
+                    '<div class="spinner-border" role="status">'+
+                        '<span class="visually-hidden">Loading...</span>'+
+                    '</div>'+
+                '</div>',
+          showCloseButton: false,
+          showCancelButton: false,
+          focusConfirm: false,
+          showConfirmButton: false
+        })
         }
 
-    },
-    created(){
-        this.fetchCustomers();
-    },
-    mounted() {
-      console.log('Component mounted.')
+
     }
 }
 </script>

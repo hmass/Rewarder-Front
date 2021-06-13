@@ -17,7 +17,12 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" v-model="password" class="form-control" id="password">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button v-if="!loading" type="submit" class="btn btn-primary">Submit</button>
+
+            <button v-else class="btn btn-primary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                wait...
+            </button>
 
              <li class="nav-item">
                 <router-link class="nav-link" to="/forgot">Forgot password</router-link>
@@ -44,7 +49,8 @@ export default {
         return {
             email: '',
             password: '',
-            error: ''
+            error: '',
+            loading: false
         }
     },
 
@@ -54,6 +60,7 @@ export default {
         async handleSubmit(){
 
             try {
+                this.loading = true
                 const response = await axios.post('login', {
                 email: this.email,
                 password: this.password
@@ -67,9 +74,11 @@ export default {
                 this.$store.dispatch('user', response.data.user);
 
                 this.$router.push('/');
+                this.loading = false
 
             } catch (e) {
                 this.error = 'Invalid username/password';
+                this.loading = false
             }
             
 
